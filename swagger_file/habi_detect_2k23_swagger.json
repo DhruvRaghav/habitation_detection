@@ -1,0 +1,217 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "AI ML APIs",
+    "description": "# HABITATION DETECTION\n\n | INTRODUCTION |\n\n* This API provides the following functionality-- <ul><li>Provides the facility to detect humans habitation of rural, suburban and urban areas on satellite imagery. </li><li>Returns the featureList with lat longs in geojson form. <br><br><br><hr><br>![MapmyIndia logo](https://www.mapmyindia.com/api/img/mapmyindia-api.png)\n\nOn a Mission to <b>\"Make our world better through maps, location technologies & IoT\"</b>, MapmyIndia is continuously enabling real time hyper-local information access through its map & location services. AI ML APIs are a part of mGIS platform and the document describes APIs usage and specifications for their integration into an application. The document covers :\n\n\n<ul><li>List of APIs along with use cases</ul></li> \n<ul><li>Explanation of resources and query parameters</ul></li>\n<ul><li>Listing of response structure and data type</ul></li>\n\n## Important notes\n\n <ul><li><b>URLs</b>: the urls to use for Production is :  <ul><li>\n <b>Production</b>:\n<code>https://aiml.mappls.com/</code></li><li>  For example <code>https://aiml.mappls.com/Habitation/ </code> <br> To call our API, the endpoint requires access-token authorization and the <code>access-token</code> needs to be . </li> </ul> <li>For any issues or questions please submit it to our support : <a href=\"mailto:apisupport@mapmyindia.com\" target=\"_blank\">API Support</a>.  If you have some non-technical or commercial queries, contact your service account manager</li></ul>",
+    "contact": {
+      "name": "MapmyIndia API Support",
+      "url": "https://www.mapmyindia.com/api/#f_cont",
+      "email": "apisupport@mapmyindia.com"
+    },
+    "termsOfService": "https://www.mapmyindia.com/api/terms-&-conditions",
+    "version": "V1.0.0",
+    "license": {
+      "name": "Revised BSD-3 Clause",
+      "url": "https://github.com/MapmyIndia/"
+    }
+  },
+  "tags": [
+    {
+      "name": "Habtitation Detection APIs",
+      "description": "It will allow you to extract the human habitation in the form of Geojson."
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://aiml.mappls.com/",
+      "description": "Production server for AI ML APIs"
+    },
+    {
+      "url": "http://10.10.21.159:5002/",
+      "description": "Local server for AI ML APIs"
+    },
+    {
+      "url": "http://0.0.0.0:5002/",
+      "description": "Local server for AI ML APIs"
+    }
+  ],
+  "paths": {
+    "/Habitation/": {
+      "post": {
+        "tags": [
+          "Habtitation Detection APIs"
+        ],
+        "summary": "Returns the array of features which contains objects of geometry of the uploaded image.",
+        "description": "Fetches the featureList of the uploaded image on the basis of the\n geotag, featureNme, bounds provided by the user. file, bounds are the mandatory parameters.",
+        "operationId": "describeDatasetGet",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/panofacebox"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/describeDatasetRes_2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request, User made an error while creating a valid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorObject400"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorObject500"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "requestBodies": {
+      "panofacebox": {
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "description": "Image file in .jpg, .jpeg and .png formats",
+                  "type": "string",
+                  "format": "binary"
+                },
+                "bounds": {
+                  "description": "will be an object containing south-west and north-east corner of the image uploaded. Bounds is mandatory in case when geotag value is 2 and is not required in case when geotag value is 0 and 1."
+                },
+                "scale": {
+                  "description": "insert the image scale"
+                },
+                "geotag": {
+                  "description": "0 / 1 / 2"
+                },
+                "img_type": {
+                  "description": "google"
+                }
+              },
+              "required": [
+                "file",
+                "scale",
+                "geotag",
+                "img_type"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "describeDatasetRes_2": {
+        "title": "result",
+        "type": "object",
+        "properties": {
+          "Features": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "geometry": {
+                  "type": "object",
+                  "properties": {
+                    "coordinates": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": [
+                          [
+                            189,
+                            0
+                          ],
+                          [
+                            189,
+                            2
+                          ],
+                          [
+                            190,
+                            3
+                          ],
+                          [
+                            190,
+                            9
+                          ],
+                          [
+                            185,
+                            14
+                          ]
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorObject400": {
+        "title": "Request ErrorObject",
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Client side error, Invalid parameter request",
+            "example": "Mandatory Parameter Missing"
+          },
+          "code": {
+            "type": "number",
+            "description": "Error code.",
+            "example": 400
+          }
+        }
+      },
+      "ErrorObject500": {
+        "title": "Internal Server ErrorObject",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Error code.",
+            "example": "500"
+          },
+          "error": {
+            "type": "string",
+            "description": "Different error messages that might have occurred while making a particular request to the server",
+            "example": "Something went wrong."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}

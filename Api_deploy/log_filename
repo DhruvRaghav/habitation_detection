@@ -1,0 +1,5 @@
+2023-05-08 16:53:47,649 - my_logger - ERROR - list index out of range
+Traceback (most recent call last):
+  File "/mnt/vol2/Dhruv_Raghav/general_unet_model/Api_deploy/Habitat_detection_2k23_deploy.py", line 567, in Habitation
+    get1=image.filename.split('.')[1]
+IndexError: list index out of range
